@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central do Planejamento 2027 - Sebrae</title>
+    
+    <style>
+        /* ==========================================================================
+           1. VARIÁVEIS DE DESIGN (PALETA OFICIAL SEBRAE & DIRETRIZES BRANDBOOK)
+           ========================================================================== */
+        :root {
+            /* Cores Principais */
+            --sebrae-azul: #2a4fda;
+            --sebrae-atlantico: #0b2574;
+            --sebrae-ceu: #65b7fb;
+            --sebrae-offwhite: #eff3ee;
+            --sebrae-preto: #000000;
+            --sebrae-branco: #ffffff;
+            
+            /* Cores Secundárias para os Perfis */
+            --perfil-coordenador: #2a4fda;
+            --perfil-gestor-reg: #61b466;
+            --perfil-gestor-uni: #be64e3;
+            --perfil-gerente-reg: #f39d72;
+            --perfil-gerente-uni: #333333;
+            --perfil-gerente-coord: #e0565d;
+            
+            /* Cores de Categoria (Etapas) */
+            --cat-executar: #2a4fda;
+            --cat-acompanhar: #61b466;
+            --cat-governanca: #be64e3;
+
+            --font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           2. ESTILOS GERAIS E ESTRUTURA CONTAINER (INTEGRAÇÃO WORDPRESS)
+           ========================================================================== */
+        .sebrae-wp-wrapper {
+            font-family: var(--font-family);
+            color: var(--sebrae-preto);
+            background-color: var(--sebrae-branco);
+            line-height: 1.6;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 24px 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .sebrae-wp-wrapper *, 
+        .sebrae-wp-wrapper *::before, 
+        .sebrae-wp-wrapper *::after {
+            box-sizing: border-box;
+        }
+
+        /* ==========================================================================
+           3. CABEÇALHO INSTITUCIONAL CENTRALIZADO
+           ========================================================================== */
+        .planejamento-header {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 2px solid var(--sebrae-offwhite);
+            text-align: center;
+        }
+
+        .planejamento-header h1 {
+            font-size: 2.5rem;
+            color: var(--sebrae-atlantico);
+            margin: 0 0 16px 0;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .planejamento-header .welcome-text {
+            font-size: 1.125rem;
+            color: #4a4a4a;
+            max-width: 850px;
+            margin: 0 auto 24px auto;
+        }
+
+        .planejamento-header .highlight-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(45deg, var(--sebrae-azul), var(--sebrae-atlantico));
+            color: var(--sebrae-branco);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* ==========================================================================
+           4. SELEÇÃO DO PERFIL (LAYOUT CENTRALIZADO 3X3)
+           ========================================================================== */
+        .perfis-section {
+            margin-bottom: 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .perfis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(300px, 380px));
+            gap: 24px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (max-width: 1024px) {
+            .perfis-grid {
+                grid-template-columns: repeat(2, minmax(300px, 400px));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .perfis-grid {
+                grid-template-columns: minmax(280px, 1fr);
+            }
+        }
+
+        .perfil-card {
+            background-color: var(--sebrae-offwhite);
+            border-radius: 6px;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-top: 5px solid #ccc;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .perfil-card:hover {
+            transform: translateY(-4px);
+            background-color: var(--sebrae-branco);
+            box-shadow: 0 12px 24px rgba(11, 37, 116, 0.08);
+        }
+
+        .card-coordenador { border-top-color: var(--perfil-coordenador); }
+        .card-gestor-reg { border-top-color: var(--perfil-gestor-reg); }
+        .card-gestor-uni { border-top-color: var(--perfil-gestor-uni); }
+        .card-gerente-reg { border-top-color: var(--perfil-gerente-reg); }
+        .card-gerente-uni { border-top-color: var(--perfil-gerente-uni); }
+        .card-gerente-coord { border-top-color: var(--perfil-gerente-coord); }
+
+        .perfil-card.active {
+            background-color: var(--sebrae-branco);
+            box-shadow: 0 4px 16px rgba(11, 37, 116, 0.06);
+        }
+        .card-coordenador.active { border-left: 1px solid var(--perfil-coordenador); border-right: 1px solid var(--perfil-coordenador); border-bottom: 1px solid var(--perfil-coordenador); }
+        .card-gestor-reg.active { border-left: 1px solid var(--perfil-gestor-reg); border-right: 1px solid var(--perfil-gestor-reg); border-bottom: 1px solid var(--perfil-gestor-reg); }
+        .card-gestor-uni.active { border-left: 1px solid var(--perfil-gestor-uni); border-right: 1px solid var(--perfil-gestor-uni); border-bottom: 1px solid var(--perfil-gestor-uni); }
+        .card-gerente-reg.active { border-left: 1px solid var(--perfil-gerente-reg); border-right: 1px solid var(--perfil-gerente-reg); border-bottom: 1px solid var(--perfil-gerente-reg); }
+        .card-gerente-uni.active { border-left: 1px solid var(--perfil-gerente-uni); border-right: 1px solid var(--perfil-gerente-uni); border-bottom: 1px solid var(--perfil-gerente-uni); }
+        .card-gerente-coord.active { border-left: 1px solid var(--perfil-gerente-coord); border-right: 1px solid var(--perfil-gerente-coord); border-bottom: 1px solid var(--perfil-gerente-coord); }
+
+        .card-main-content {
+            margin-bottom: 24px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .perfil-card h3 {
+            font-size: 1.35rem;
+            color: var(--sebrae-atlantico);
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .perfil-card p {
+            font-size: 0.95rem;
+            color: #555555;
+            margin: 0;
+        }
+
+        .btn-acessar {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center;
+            border: 2px solid transparent;
+            background-color: transparent;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .card-coordenador .btn-acessar { color: var(--perfil-coordenador); border-color: var(--perfil-coordenador); }
+        .card-coordenador:hover .btn-acessar, .card-coordenador.active .btn-acessar { background-color: var(--perfil-coordenador); color: var(--sebrae-branco); }
+
+        .card-gestor-reg .btn-acessar { color: var(--perfil-gestor-reg); border-color: var(--perfil-gestor-reg); }
+        .card-gestor-reg:hover .btn-acessar, .card-gestor-reg.active .btn-acessar { background-color: var(--perfil-gestor-reg); color: var(--sebrae-branco); }
+
+        .card-gestor-uni .btn-acessar { color: var(--perfil-gestor-uni); border-color: var(--perfil-gestor-uni); }
+        .card-gestor-uni:hover .btn-acessar, .card-gestor-uni.active .btn-acessar { background-color: var(--perfil-gestor-uni); color: var(--sebrae-branco); }
+
+        .card-gerente-reg .btn-acessar { color: var(--perfil-gerente-reg); border-color: var(--perfil-gerente-reg); }
+        .card-gerente-reg:hover .btn-acessar, .card-gerente-reg.active .btn-acessar { background-color: var(--perfil-gerente-reg); color: var(--sebrae-branco); }
+
+        .card-gerente-uni .btn-acessar { color: var(--perfil-gerente-uni); border-color: var(--perfil-gerente-uni); }
+        .card-gerente-uni:hover .btn-acessar, .card-gerente-uni.active .btn-acessar { background-color: var(--perfil-gerente-uni); color: var(--sebrae-branco); }
+
+        .card-gerente-coord .btn-acessar { color: var(--perfil-gerente-coord); border-color: var(--perfil-gerente-coord); }
+        .card-gerente-coord:hover .btn-acessar, .card-gerente-coord.active .btn-acessar { background-color: var(--perfil-gerente-coord); color: var(--sebrae-branco); }
+
+        /* ==========================================================================
+           5. ÁREA DE CONTEÚDO EXPANSÍVEL (JORNADAS)
+           ========================================================================== */
+        .jornadas-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .jornada-content-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            background-color: var(--sebrae-branco);
+            border-radius: 6px;
+            padding: 8px 0;
+        }
+
+        .jornada-content-panel.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .jornada-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 24px;
+            background-color: var(--sebrae-offwhite);
+            border-radius: 6px;
+        }
+
+        .jornada-title-wrapper {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .jornada-panel-header h2 {
+            font-size: 1rem;
+            color: var(--sebrae-azul);
+            margin: 0 0 4px 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .jornada-panel-header .sub-role {
+            font-size: 1.8rem;
+            color: var(--sebrae-atlantico);
+            margin: 0 0 12px 0;
+            font-weight: 800;
+        }
+
+        .jornada-panel-header .role-description {
+            font-size: 1rem;
+            color: #475569;
+            margin: 0;
+            max-width: 900px;
+        }
+
+        .btn-print {
+            background-color: var(--sebrae-atlantico);
+            color: var(--sebrae-branco);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-print:hover {
+            background-color: var(--sebrae-azul);
+        }
+
+        .resumo-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .resumo-card {
+            background-color: var(--sebrae-branco);
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(11, 37, 116, 0.02);
+        }
+
+        .resumo-card h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #64748b;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .resumo-card p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--sebrae-atlantico);
+            font-weight: 700;
+        }
+
+        .resumo-card ul {
+            margin: 0;
+            padding: 0 0 0 18px;
+            color: var(--sebrae-atlantico);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .construction-notice {
+            padding: 48px;
+            text-align: center;
+            background-color: var(--sebrae-offwhite);
+            border-radius: 6px;
+            border: 2px dashed #ccc;
+        }
+
+        .construction-notice p {
+            font-size: 1.1rem;
+            color: #666;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           6. COMPONENTE ACCORDION DAS ETAPAS DA JORNADA
+           ========================================================================== */
+        .etapas-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: var(--sebrae-branco);
+            transition: var(--transition-smooth);
+        }
+
+        .accordion-item:hover {
+            border-color: #cbd5e1;
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            padding: 20px 24px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+        .accordion-trigger:hover {
+            background-color: #f8fafc;
+        }
+
+        .trigger-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .etapa-number {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--sebrae-branco);
+            background-color: var(--sebrae-atlantico);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .etapa-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .etapa-title-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--sebrae-atlantico);
+            margin: 0;
+        }
+
+        .etapa-period-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .trigger-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .category-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 12px;
+            letter-spacing: 0.05em;
+            color: var(--sebrae-branco);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tag-executar { background-color: var(--cat-executar); }
+        .tag-acompanhar { background-color: var(--cat-acompanhar); }
+        .tag-governanca { background-color: var(--cat-governanca); }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+            color: var(--sebrae-atlantico);
+            flex-shrink: 0;
+        }
+
+        .accordion-item.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: none;
+            overflow: hidden;
+            border-top: 1px solid transparent;
+        }
+
+        .accordion-item.open .accordion-content {
+            display: block;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .accordion-body-inner {
+            padding: 24px;
+        }
+
+        .etapa-single-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .info-block h4 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--sebrae-atlantico);
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .info-block p {
+            margin: 0;
+            font-size: 1rem;
+            color: #334155;
+        }
+
+        .info-block ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #334155;
+        }
+
+        .info-block li {
+            margin-bottom: 6px;
+        }
+
+        .attention-box {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--perfil-gerente-reg);
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .attention-box h5 {
+            margin: 0 0 4px 0;
+            color: #b45309;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .attention-box p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #78350f;
+        }
+
+        /* ==========================================================================
+           7. MATERIAIS DE APOIO (GRUPOS EXPANSÍVEIS INTERNOS)
+           ========================================================================== */
+        .materials-section-wrapper {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 24px;
+            margin-top: 12px;
+        }
+
+        .materials-section-wrapper h4 {
+            font-size: 1.1rem;
+            color: var(--sebrae-atlantico);
+            margin: 0 0 16px 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .materials-sub-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sub-accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background-color: var(--sebrae-branco);
+        }
+
+        .sub-accordion-trigger {
+            width: 100%;
+            padding: 14px 20px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--sebrae-atlantico);
+            font-size: 0.95rem;
+        }
+
+        .sub-accordion-trigger:hover {
+            background-color: #f8fafc;
+        }
+
+        .sub-accordion-content {
+            display: none;
+            padding: 16px 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .sub-accordion-item.open .sub-accordion-content {
+            display: block;
+        }
+
+        .sub-arrow-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .sub-accordion-item.open .sub-arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .materials-grid-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .material-link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--sebrae-azul);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 4px 0;
+            transition: var(--transition-smooth);
+        }
+
+        .material-link-item:hover {
+            color: var(--sebrae-atlantico);
+        }
+
+        .pdf-icon {
+            color: #e0565d;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* ==========================================================================
+           8. COMPONENTE CHECKLIST MODERNO
+           ========================================================================== */
+        .checklist-container {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 24px;
+        }
+
+        .checklist-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--sebrae-atlantico);
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checklist-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #334155;
+            cursor: pointer;
+            padding: 10px 16px;
+            border-radius: 4px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition-smooth);
+        }
+
+        .checklist-label:hover {
+            background-color: var(--sebrae-offwhite);
+            border-color: #cbd5e1;
+        }
+
+        .checklist-label input[type="checkbox"] {
+            margin-top: 3px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--sebrae-azul);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checklist-label:has(input:checked) {
+            color: #64748b;
+            text-decoration: line-through #cbd5e1;
+            background-color: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        /* ==========================================================================
+           9. CONFIGURAÇÃO EXCLUSIVA DE IMPRESSÃO
+           ========================================================================== */
+        @media print {
+            body, .sebrae-wp-wrapper {
+                background-color: var(--sebrae-branco) !important;
+                color: var(--sebrae-preto) !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .planejamento-header,
+            .perfis-section,
+            .btn-print,
+            .arrow-icon,
+            .sub-arrow-icon,
+            .construction-notice {
+                display: none !important;
+            }
+
+            .jornada-content-panel {
+                display: none !important;
+            }
+
+            .jornada-content-panel.visible {
+                display: block !important;
+            }
+
+            .accordion-content, .sub-accordion-content {
+                display: block !important;
+            }
+
+            .accordion-item, .sub-accordion-item {
+                border: 1px solid #000 !important;
+                page-break-inside: avoid;
+                margin-bottom: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sebrae-wp-wrapper">
+        
+        <header class="planejamento-header">
+            <h1>Central do Planejamento 2027</h1>
+            <p class="welcome-text">
+                Bem-vindo(a) à Central do Planejamento. Aqui você encontrará todas as orientações necessárias para participar do Planejamento Estratégico 2027. Selecione abaixo a função que você exerce para visualizar sua jornada, responsabilidades, prazos e materiais de apoio.
+            </p>
+            <div class="highlight-badge">
+                <span>Planejar é transformar estratégia em resultados.</span>
+            </div>
+        </header>
+
+        <section class="perfis-section" aria-label="Seleção de Perfil Profissional">
+            <div class="perfis-grid">
+                
+                <div class="perfil-card card-coordenador" data-target="jornada-coordenador" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h3>Coordenador</h3>
+                        <p>Responsável por liderar a consolidação tática, articular as demandas locais e parametrizar as metas orçamentárias estratégicas.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+                <div class="perfil-card card-gestor-reg" data-target="jornada-construcao" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                        </div>
+                        <h3>Gestor Regional</h3>
+                        <p>Articula as diretrizes de planejamento nos territórios de atuação, monitorando a aderência regional das metas macro.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+                <div class="perfil-card card-gestor-uni" data-target="jornada-construcao" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                        </div>
+                        <h3>Gestor de Unidade de Gestão</h3>
+                        <p>Gerencia a execução orçamentária interna da unidade, reportando desvios e alinhando entregas técnicas.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+                <div class="perfil-card card-gerente-reg" data-target="jornada-construcao" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <h3>Gerente Regional</h3>
+                        <p>Supervisiona os escritórios regionais, garantindo que as operações estejam integradas ao mapa estratégico.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+                <div class="perfil-card card-gerente-uni" data-target="jornada-construcao" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        </div>
+                        <h3>Gerente de Unidade de Gestão</h3>
+                        <p>Valida o escopo tático de sua unidade setorial, direcionando recursos operacionais diretos.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+                <div class="perfil-card card-gerente-coord" data-target="jornada-gerente-coord" onclick="selectProfile(this)">
+                    <div class="card-main-content">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        </div>
+                        <h3>Gerente de Unidade de Coordenação</h3>
+                        <p>Detém a chancela final corporativa institucional sobre o cronograma integrado das janelas de planejamento.</p>
+                    </div>
+                    <button class="btn-acessar" type="button">Acessar Jornada</button>
+                </div>
+
+            </div>
+        </section>
+
+        <main class="jornadas-container" id="jornadas-container">
+
+            <article id="jornada-coordenador" class="jornada-content-panel">
+                <div class="jornada-panel-header">
+                    <div class="jornada-title-wrapper">
+                        <h2>Guia Operacional</h2>
+                        <div class="sub-role">Coordenador</div>
+                        <p class="role-description">
+                            Como Coordenador, você é o principal responsável por construir uma carteira de projetos consistente para sua coordenação, garantindo que ela esteja alinhada ao Documento de Referência Estadual (DRE), às estratégias do Sebrae Paraná e às necessidades das regionais. Durante toda a jornada, você atuará em parceria com os Gestores Regionais, Gerente da Unidade e UGE, conduzindo a construção técnica dos projetos até sua aprovação institucional.
+                        </p>
+                    </div>
+                    <button class="btn-print" onclick="window.print()" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir Jornada
+                    </button>
+                </div>
+
+                <div class="resumo-cards-container">
+                    <div class="resumo-card">
+                        <h4>Principais Parceiros</h4>
+                        <ul>
+                            <li>Gestores Regionais</li>
+                            <li>Gerente da Unidade</li>
+                            <li>UGE</li>
+                        </ul>
+                    </div>
+                    <div class="resumo-card">
+                        <h4>Período de Maior Dedicação</h4>
+                        <p>10/08 a 28/08</p>
+                    </div>
+                    <div class="resumo-card">
+                        <h4>Responsabilidade Principal</h4>
+                        <p>Construção e consolidação da carteira de projetos da coordenação.</p>
+                    </div>
+                </div>
+
+                <div class="etapas-accordion">
+                    <div class="accordion-item open" id="etapa-1-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">01</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Revisão da DRE</h3>
+                                    <span class="etapa-period-text">Período: Até 22/07</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content" style="display: block;">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que a DRE represente corretamente a estratégia da coordenação e sirva como base para a construção do planejamento regional.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Revisar cuidadosamente a DRE utilizando como apoio a análise encaminhada pela UGE.</li>
+                                            <li>Validar o alinhamento estratégico da DRE.</li>
+                                            <li>Revisar todos os indicadores.</li>
+                                            <li>Dar atenção especial aos indicadores obrigatórios do Sebrae Nacional.</li>
+                                            <li>Propor metas para esses indicadores.</li>
+                                            <li>Sempre que possível distribuir as metas por regional.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="materials-section-wrapper">
+                                        <h4>Materiais de Apoio</h4>
+                                        <div class="materials-sub-accordion">
+                                            
+                                            <div class="sub-accordion-item open">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Guia de Aprimoramento das DREs</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content" style="display: block;">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/Guia%20de%20Aprimoramento%20das%20DREs%202027%20-%20Sebrae%20Paran%C3%A1.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Guia de Aprimoramento das DREs 2027</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Empresariais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/1_dna_canais_presenciais_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Canais Presenciais</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/2_dna_canais_digitais_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Canais Digitais</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/3_dna_atendimento_relacionamento_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Atendimento e Relacionamento</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/4_dna_segmento_clientes_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Segmento de Clientes</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Institucionais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/5_dna_cultura_empreendedora_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Cultura Empreendedora</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/6_dna_lideranca_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Liderança</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/7_dna_politicas_publicas_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Políticas Públicas</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/8_dna_inovacao_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Inovação</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/9_dna_acesso_financeiro_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Acesso a Serviços Financeiros</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Setoriais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/10_dna_agronegocio_ig_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Agro e IG</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/11_dna_industria_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Indústria</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/12_dna_turismo_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Turismo</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/13_dna_comercio_servicos_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Comércio e Serviços</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/14_dna_mercado_empresarial_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Mercado Empresarial</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/15_dna_economia_criativa_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Economia Criativa</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/16_dna_startup_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Startup</span>
+                                                        </a>
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/17_dna_tic_2027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Tecnologia da Informação</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Uma DRE consistente reduz significativamente o retrabalho das próximas etapas e oferece uma base sólida para os Gestores Regionais construírem suas propostas.</p>
+                                    </div>
+                                    
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Revisei toda a DRE.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Considerei a análise enviada pela UGE.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Consultei o Guia de Aprimoramento das DREs.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Consultei o DNA Estratégico da minha coordenação.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Revisei todos os indicadores.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Defini metas para os indicadores obrigatórios do Sebrae Nacional.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Regionalizei as metas sempre que possível.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">02</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">PodPlanejar</h3>
+                                    <span class="etapa-period-text">Período: 27/07 a 10/08 (manhã)</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Compartilhar as principais diretrizes da coordenação para o Planejamento 2027.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <p>Participar da gravação do PodPlanejar conforme agenda enviada anteriormente.</p>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>As agendas já foram encaminhadas pelo Outlook.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Confirmei minha agenda.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Participei da gravação.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">03</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Alinhamento com os Gestores Regionais</h3>
+                                    <span class="etapa-period-text">Período: Até 07/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que todos iniciem o planejamento com entendimento comum sobre metas e prioridades.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Alinhar metas.</li>
+                                            <li>Discutir indicadores.</li>
+                                            <li>Esclarecer dúvidas.</li>
+                                            <li>Validar prioridades.</li>
+                                            <li>Antecipar possíveis conflitos.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Quanto melhor este alinhamento ocorrer agora, menor será o retrabalho durante a construção das propostas.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Realizei os alinhamentos com todos os Gestores Regionais envolvidos.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Esclareci dúvidas sobre metas e indicadores.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Registrei os principais alinhamentos realizados.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">04</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Preparação para abertura do Planejamento</h3>
+                                    <span class="etapa-period-text">Data: 07/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Nesta data, a UGE apresentará: DREs revisadas, metas propostas e tetos orçamentários.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma entrega é necessária. Apenas acompanhe o cenário apresentado para compreender as premissas que orientarão o planejamento.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Responsável</h4>
+                                        <p>UGE</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">05</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Abertura Oficial do Planejamento</h3>
+                                    <span class="etapa-period-text">Data: 10/08 (tarde)</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <ul>
+                                            <li>Abertura oficial do Planejamento 2027.</li>
+                                            <li>Liberação do Pipefy para preenchimento.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Preparar-se para iniciar imediatamente a construção da carteira de projetos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">06</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Construção da Carteira de Projetos</h3>
+                                    <span class="etapa-period-text">Período: 10/08 a 21/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Construir uma carteira consistente para a coordenação e apoiar a construção regional.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <p><strong>Projetos Regionais:</strong> Receber propostas, negociar melhorias, solicitar ajustes e orientar os Gestores Regionais.</p>
+                                        <p><strong>Projetos da Coordenação:</strong> Elaborar os projetos da coordenação, elaborar os projetos da unidade e realizar os lançamentos no Pipefy.</p>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Este costuma ser o período de maior dedicação do Coordenador durante todo o processo.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Analisei todas as propostas regionais recebidas.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Solicitei os ajustes necessários.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Lancei todos os projetos da coordenação.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Lancei todos os projetos da unidade.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Finalizei os lançamentos dentro do prazo.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">07</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Comitê de Planejamento do CDE</h3>
+                                    <span class="etapa-period-text">Data: 14/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE apresentará o cenário ao Comitê de Planejamento do CDE juntamente com os Gerentes das Unidades de Gestão.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma. Continue focado na construção da carteira de projetos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">08</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Consolidação da Carteira da Coordenação</h3>
+                                    <span class="etapa-period-text">Período: 24/08 a 28/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Concluir a carteira de projetos da coordenação com qualidade e consistência.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Devolver propostas via Pipefy.</li>
+                                            <li>Solicitar ajustes.</li>
+                                            <li>Revisar lançamentos.</li>
+                                            <li>Validar indicadores.</li>
+                                            <li>Revisar orçamentos.</li>
+                                            <li>Conferir centros de custo.</li>
+                                            <li>Garantir consistência entre todas as propostas.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Resultado esperado</h4>
+                                        <p>Entregar uma carteira pronta para construção do Book Executivo.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Revisei toda a carteira da coordenação.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Todos os projetos passaram por validação.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Não existem pendências de lançamento.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Os orçamentos foram revisados.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Os indicadores foram conferidos.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>A carteira está pronta para o Book Executivo.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">09</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Construção do Book Executivo</h3>
+                                    <span class="etapa-period-text">Período: 31/08 a 04/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Consolidar as principais informações da coordenação para apresentação à Diretoria.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <p>Cada unidade será responsável por construir seu próprio Book Executivo. A UGE apoiará esse processo oferecendo orientações e padronização dos materiais.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Agendas</h4>
+                                        <ul>
+                                            <li>UANE — 31/08 (tarde)</li>
+                                            <li>UAR — 04/09 (manhã)</li>
+                                            <li>UCS — 04/09 (tarde)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Participei da construção do Book Executivo.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O material foi revisado.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O Book está alinhado à carteira consolidada.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O material foi entregue dentro do prazo.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">10</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Análise da Diretoria</h3>
+                                    <span class="etapa-period-text">Período: 09/09 a 18/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE utilizará todo o material produzido nas etapas anteriores para apresentar as carteiras de projetos à Diretoria.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma entrega é necessária. Permaneça disponível para esclarecer dúvidas rápidas da Diretoria, caso necessário.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">11</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Lançamento das Propostas no LEME</h3>
+                                    <span class="etapa-period-text">Fluxo contínuo</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>À medida que as propostas forem sendo aprovadas pela Diretoria, a UGE realizará os lançamentos no LEME.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma. Neste momento basta acompanhar o andamento do processo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">12</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Envio ao Sebrae Nacional</h3>
+                                    <span class="etapa-period-text">Prazo: Até 21/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Após aprovação da Diretoria, a UGE encaminhará oficialmente o Plano ao Sebrae Nacional.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">13</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Comitê do CDE</h3>
+                                    <span class="etapa-period-text">Período: Setembro</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Será realizada uma nova reunião do Comitê do CDE. A data e a pauta serão divulgadas oportunamente.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma. Apenas acompanhe as comunicações enviadas pela UGE.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">14</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Apresentação ao Sebrae Nacional</h3>
+                                    <span class="etapa-period-text">Período: 22/09 a 30/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Os Diretores apresentarão o Planejamento 2027 utilizando os Books Executivos produzidos pelas unidades.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">15</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Aprovação pelo CDE</h3>
+                                    <span class="etapa-period-text">Data: 19/10</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>O Conselho Deliberativo Estadual apreciará o Planejamento Estratégico 2027.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Aguardar a aprovação institucional do Plano.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">16</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Detalhamento dos Projetos no LEME</h3>
+                                    <span class="etapa-period-text">Período: 20/10 a 13/11</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Concluir o detalhamento dos projetos aprovados.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Detalhar os projetos da coordenação.</li>
+                                            <li>Detalhar os projetos regionais.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>A UGE está desenvolvendo uma automação para facilitar esse lançamento. Caso esteja disponível, o esforço operacional será significativamente reduzido.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Todos os projetos foram detalhados no LEME.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>As informações estão completas e consistentes.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O detalhamento foi concluído dentro do prazo.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Não existem pendências de lançamento.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>A coordenação está pronta para iniciar a execução do Plano 2027.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+            <article id="jornada-gerente-coord" class="jornada-content-panel">
+                <div class="jornada-panel-header">
+                    <div class="jornada-title-wrapper">
+                        <h2>Guia Operacional</h2>
+                        <div class="sub-role">Gerente de Unidade de Coordenação</div>
+                        <p class="role-description">
+                            Como Gerente de Unidade de Coordenação, sua missão é garantir que toda a carteira de projetos da unidade seja construída de forma consistente, estratégica e integrada entre as coordenações e as regionais. Durante toda a jornada você atuará como patrocinador do processo, apoiando os Coordenadores, promovendo alinhamentos com os Gerentes Regionais, solucionando conflitos, validando as propostas da unidade e garantindo que a carteira apresentada à Diretoria represente a melhor estratégia para a execução do Planejamento 2027.
+                        </p>
+                    </div>
+                    <button class="btn-print" onclick="window.print()" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir Jornada
+                    </button>
+                </div>
+
+                <div class="resumo-cards-container">
+                    <div class="resumo-card">
+                        <h4>Principais Parceiros</h4>
+                        <ul>
+                            <li>Coordenadores</li>
+                            <li>Gerentes Regionais</li>
+                            <li>UGE</li>
+                        </ul>
+                    </div>
+                    <div class="resumo-card">
+                        <h4>Período de Maior Dedicação</h4>
+                        <p>10/08 a 28/08</p>
+                    </div>
+                    <div class="resumo-card">
+                        <h4>Responsabilidade Principal</h4>
+                        <p>Garantir a construção, validação e consolidação da carteira estratégica da unidade.</p>
+                    </div>
+                </div>
+
+                <div class="etapas-accordion">
+                    
+                    <div class="accordion-item open">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">01</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Revisão das DREs</h3>
+                                    <span class="etapa-period-text">Período: Até 22/07</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content" style="display: block;">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que todas as DREs da unidade estejam consistentes, alinhadas à estratégia institucional e prontas para subsidiar o planejamento das regionais.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Orientar os Coordenadores durante a revisão das DREs.</li>
+                                            <li>Validar cada DRE revisada antes do envio.</li>
+                                            <li>Garantir que todas sejam encaminhadas à UGE dentro do prazo.</li>
+                                            <li>Verificar se os indicadores obrigatórios do Sebrae Nacional possuem metas definidas.</li>
+                                            <li>Avaliar se as metas foram desdobradas por regional sempre que possível.</li>
+                                            <li>Certificar-se de que a DRE represente adequadamente a estratégia da unidade.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="materials-section-wrapper">
+                                        <h4>Materiais de Apoio</h4>
+                                        <div class="materials-sub-accordion">
+                                            <div class="sub-accordion-item open">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Relatório Geral</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content" style="display: block;">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/Relat%C3%B3rio%20de%20Avalia%C3%A7%C3%A3o%20de%20Maturidade%20Estrat%C3%A9gica%20das%20DREs%202027%20-%20Sebrae%20Paran%C3%A1.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>Relatório de Avaliação de Maturidade Estratégica das DREs 2027 - Abrir</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Institucionais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/UANE%20-%20Maturidade%20Estrat%C3%A9gica%20-%20Sebrae%20Paran%C3%A1%202027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>UANE – Maturidade Estratégica - Abrir</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Setoriais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/UCS%20-%20Maturidade%20Estrat%C3%A9gica%20-%20Sebrae%20Paran%C3%A1%202027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>UCS – Maturidade Estratégica - Abrir</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="sub-accordion-item">
+                                                <button class="sub-accordion-trigger" onclick="toggleSubAccordion(this)" type="button">
+                                                    <span>Clientes Empresariais</span>
+                                                    <svg class="sub-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                </button>
+                                                <div class="sub-accordion-content">
+                                                    <div class="materials-grid-links">
+                                                        <a href="https://sebraepr.sharepoint.com/sites/pr_uge/doc/Documents/UAR%20-%20Maturidade%20Estrat%C3%A9gica%20-%20Sebrae%20Paran%C3%A1%202027.pdf" target="_blank" class="material-link-item">
+                                                            <span class="pdf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+                                                            <span>UAR – Maturidade Estratégica - Abrir</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Uma DRE inconsistente reduz a qualidade do planejamento regional e aumenta significativamente o retrabalho nas etapas seguintes.</p>
+                                    </div>
+
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Todos os Coordenadores revisaram suas DREs.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Validei todas as DREs da unidade.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>As DREs foram encaminhadas à UGE.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Os indicadores obrigatórios possuem metas.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>As metas regionalizadas foram avaliadas.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Consultei os relatórios de maturidade estratégica.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">02</div>
+                                <div class="etapa-number">02</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">PodPlanejar</h3>
+                                    <span class="etapa-period-text">Período: 27/07 a 10/08 (manhã)</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Participar da comunicação institucional das diretrizes do Planejamento 2027.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <p>Participar da gravação do PodPlanejar conforme agenda enviada.</p>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>As agendas já foram disponibilizadas no Outlook.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Confirmei minha agenda.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Participei da gravação.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">03</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Alinhamento com os Gerentes Regionais</h3>
+                                    <span class="etapa-period-text">Período: Até 07/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Promover alinhamentos estratégicos entre unidade e regionais antes da abertura oficial do planejamento.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Realizar reuniões de alinhamento com os Gerentes Regionais.</li>
+                                            <li>Antecipar possíveis conflitos.</li>
+                                            <li>Esclarecer dúvidas estratégicas.</li>
+                                            <li>Buscar consenso sobre prioridades e metas.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Resolver divergências nesta etapa reduz significativamente os conflitos durante a construção das carteiras.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Realizei alinhamento com todos os Gerentes Regionais.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Os principais riscos foram discutidos.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>As prioridades estratégicas foram alinhadas.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">04</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Preparação para abertura do Planejamento</h3>
+                                    <span class="etapa-period-text">Data: 07/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE apresentará: DREs revisadas; Metas propostas; Tetos orçamentários.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Acompanhar o cenário apresentado para compreender as premissas que orientarão o planejamento.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">05</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Abertura Oficial do Planejamento</h3>
+                                    <span class="etapa-period-text">Data: 10/08 (tarde)</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Abertura oficial do Planejamento 2027 e liberação do Pipefy.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Acompanhar o início da construção das propostas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">06</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Construção da Carteira de Projetos</h3>
+                                    <span class="etapa-period-text">Período: 10/08 a 21/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que a carteira da unidade seja construída com qualidade e alinhamento estratégico.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Apoiar os Coordenadores durante a negociação com os Gestores Regionais.</li>
+                                            <li>Atuar quando houver conflitos ou necessidade de mediação.</li>
+                                            <li>Promover alinhamentos com os Gerentes Regionais.</li>
+                                            <li>Até 21/08 aprovar no Pipefy todos os projetos da unidade.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>Seu papel é garantir que a carteira da unidade esteja madura antes da consolidação.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Apoiei os Coordenadores nas negociações.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Resolvi conflitos relevantes.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Todos os projetos da unidade foram aprovados no Pipefy.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>A carteira está consistente.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">07</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Comitê de Planejamento do CDE</h3>
+                                    <span class="etapa-period-text">Data: 14/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A reunião será conduzida pela UGE juntamente com os Gerentes das Unidades de Gestão.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma entrega é necessária. Continue apoiando a construção da carteira da unidade.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">08</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Consolidação da Carteira</h3>
+                                    <span class="etapa-period-text">Período: 24/08 a 28/08</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que toda a carteira esteja pronta para apresentação executiva.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Apoiar os Coordenadores durante o fechamento das propostas.</li>
+                                            <li>Atuar junto aos Gerentes Regionais para resolver pendências.</li>
+                                            <li>Validar o cenário final da unidade.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Acompanhei a consolidação das coordenações.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>As principais pendências foram resolvidas.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>A carteira da unidade está consolidada.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">09</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Construção do Book Executivo</h3>
+                                    <span class="etapa-period-text">Período: 31/08 a 04/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Consolidar a visão executiva da unidade para apresentação à Diretoria.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <p>Participar da construção do Book Executivo juntamente com seus Coordenadores. A UGE apoiará este processo.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Agendas</h4>
+                                        <ul>
+                                            <li>UANE — 31/08 (tarde)</li>
+                                            <li>UAR — 04/09 (manhã)</li>
+                                            <li>UCS — 04/09 (tarde)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Participei da construção do Book Executivo.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Revisei o material final.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O conteúdo representa adequadamente a estratégia da unidade.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">10</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Análise da Diretoria</h3>
+                                    <span class="etapa-period-text">Período: 09/09 a 18/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE apresentará as carteiras à Diretoria.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Permanecer disponível para esclarecimentos rápidos sempre que necessário.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">11</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Lançamento das Propostas no LEME</h3>
+                                    <span class="etapa-period-text">Fluxo Contínuo</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-acompanhar">🟢 Acompanhar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE realizará os lançamentos das propostas aprovadas.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma entrega.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">12</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Envio ao Sebrae Nacional</h3>
+                                    <span class="etapa-period-text">Prazo: Até 21/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>A UGE enviará oficialmente o Plano ao Sebrae Nacional.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">13</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Comitê do CDE</h3>
+                                    <span class="etapa-period-text">Período: Setembro</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Nova reunião do Comitê do CDE. A data será divulgada posteriormente.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Acompanhar as comunicações da UGE.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">14</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Apresentação ao Sebrae Nacional</h3>
+                                    <span class="etapa-period-text">Período: 22/09 a 30/09</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>Os Diretores apresentarão o Planejamento utilizando os Books Executivos produzidos pelas unidades.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Nenhuma.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">15</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Aprovação pelo CDE</h3>
+                                    <span class="etapa-period-text">Data: 19/10</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-governanca">🟣 Governança</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>O que acontece</h4>
+                                        <p>O Conselho Deliberativo Estadual apreciará o Planejamento Estratégico 2027.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>Sua participação</h4>
+                                        <p>Aguardar a aprovação institucional.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" onclick="toggleAccordion(this)" type="button">
+                            <div class="trigger-left">
+                                <div class="etapa-number">16</div>
+                                <div class="etapa-title-area">
+                                    <h3 class="etapa-title-text">Detalhamento dos Projetos no LEME</h3>
+                                    <span class="etapa-period-text">Período: 20/10 a 13/11</span>
+                                </div>
+                            </div>
+                            <div class="trigger-right">
+                                <span class="category-tag tag-executar">🔵 Executar</span>
+                                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-body-inner">
+                                <div class="etapa-single-col">
+                                    <div class="info-block">
+                                        <h4>Objetivo</h4>
+                                        <p>Garantir que o detalhamento dos projetos seja concluído pela unidade dentro do prazo.</p>
+                                    </div>
+                                    <div class="info-block">
+                                        <h4>O que você deve fazer</h4>
+                                        <ul>
+                                            <li>Acompanhar o detalhamento realizado pelos Coordenadores.</li>
+                                            <li>Apoiar a equipe durante o lançamento.</li>
+                                            <li>Garantir que todos os projetos sejam concluídos até o encerramento da janela de detalhamento.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="attention-box">
+                                        <h5>Atenção</h5>
+                                        <p>A UGE está desenvolvendo uma automação para simplificar esta etapa. Caso esteja disponível, acompanhe sua utilização pela equipe.</p>
+                                    </div>
+                                    <div class="checklist-container">
+                                        <div class="checklist-title">Checklist de Atividades</div>
+                                        <div class="checklist-items">
+                                            <label class="checklist-label"><input type="checkbox"> <span>Todos os projetos da unidade foram detalhados.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>Não existem pendências de lançamento.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>O detalhamento foi concluído dentro do prazo.</span></label>
+                                            <label class="checklist-label"><input type="checkbox"> <span>A unidade está preparada para iniciar a execução do Plano 2027.</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article id="jornada-construcao" class="jornada-content-panel">
+                <div class="construction-notice">
+                    <div class="card-icon" style="margin: 0 auto 16px auto; color: #64748b;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <p>Conteúdo em construção.</p>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script>
+        function selectProfile(element) {
+            const cards = document.querySelectorAll('.perfil-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            const panels = document.querySelectorAll('.jornada-content-panel');
+            panels.forEach(panel => panel.classList.remove('visible'));
+
+            element.classList.add('active');
+
+            const targetId = element.getAttribute('data-target');
+            const activePanel = document.getElementById(targetId);
+            
+            if (activePanel) {
+                activePanel.classList.add('visible');
+                activePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleAccordion(button) {
+            const currentItem = button.closest('.accordion-item');
+            const content = currentItem.querySelector('.accordion-content');
+            const accordionGroup = currentItem.closest('.etapas-accordion');
+            const allItems = accordionGroup.querySelectorAll('.accordion-item');
+
+            allItems.forEach(item => {
+                if (item !== currentItem) {
+                    item.classList.remove('open');
+                    item.querySelector('.accordion-content').style.display = 'none';
+                }
+            });
+
+            currentItem.classList.toggle('open');
+            if (currentItem.classList.contains('open')) {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        }
+
+        function toggleSubAccordion(button) {
+            const currentSubItem = button.closest('.sub-accordion-item');
+            const subContent = currentSubItem.querySelector('.sub-accordion-content');
+            
+            currentSubItem.classList.toggle('open');
+            if (currentSubItem.classList.contains('open')) {
+                subContent.style.display = 'block';
+            } else {
+                subContent.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
